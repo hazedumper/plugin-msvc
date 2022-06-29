@@ -17,8 +17,28 @@ jobs:
       output_extensions: dll
       artifact_name: plugin-msvc-release
 
+  publish:
+    needs: plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: plugin-msvc-release
+          path: .
+
+      - name: Add version to filename
+        run: |
+          mv plugin-msvc.dll "plugin-msvc-${VERSION_TAG}.dll"
+        env:
+          VERSION_TAG: ${{ github.ref_name }}
+
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "plugin-msvc-v*.dll"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   cleanup_release:
-    needs: plugin_release
+    needs: publish
     if: always()
     uses: hazedumper/plugin-sdk/.github/workflows/delete_artifacts.yml@main
     with:
