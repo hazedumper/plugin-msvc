@@ -1,0 +1,45 @@
+name: Development
+
+on:
+  push:
+    branches: [develop]
+
+  pull_request:
+    branches: [develop]
+
+jobs:
+  plugin_debug:
+    uses: hazedumper/plugin-sdk/.github/workflows/build_vs_project.yml@main
+    with:
+      submodules: recursive
+      architecture: x64
+      configuration: Debug
+      solution: plugin-msvc.sln
+      output_file: plugin-msvc
+      output_extensions: dll
+      artifact_name: plugin-msvc-debug
+
+  plugin_release:
+    uses: hazedumper/plugin-sdk/.github/workflows/build_vs_project.yml@main
+    with:
+      submodules: recursive
+      architecture: x64
+      configuration: Release
+      solution: plugin-msvc.sln
+      output_file: plugin-msvc
+      output_extensions: dll
+      artifact_name: plugin-msvc-release
+
+  cleanup_debug:
+    needs: plugin_debug
+    if: always()
+    uses: hazedumper/plugin-sdk/.github/workflows/delete_artifacts.yml@main
+    with:
+      name: plugin-msvc-debug
+
+  cleanup_release:
+    needs: plugin_release
+    if: always()
+    uses: hazedumper/plugin-sdk/.github/workflows/delete_artifacts.yml@main
+    with:
+      name: plugin-msvc-release
