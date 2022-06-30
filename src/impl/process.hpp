@@ -59,6 +59,13 @@ public:
         szt  size
     ) const noexcept -> void override;
 
+    NODISCARD
+    auto
+    x86() const noexcept -> bool override
+    {
+        return x86_;
+    }
+
 private:
     ptr  handle_{ INVALID_HANDLE_VALUE };
     bool x86_{ false };
