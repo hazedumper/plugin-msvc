@@ -67,4 +67,4 @@ public:
     }
 };
 
-HAZEDUMPER_PLUGIN(hazedumper_msvc, 0, 1, 0);
+HAZEDUMPER_PLUGIN(hazedumper_msvc, 0, 1, 1);
